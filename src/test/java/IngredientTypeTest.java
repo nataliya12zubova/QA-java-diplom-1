@@ -1,15 +1,35 @@
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import praktikum.Ingredient;
 import praktikum.IngredientType;
+import static org.junit.Assert.assertEquals;
+import static praktikum.IngredientType.FILLING;
+import static praktikum.IngredientType.SAUCE;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
+@RunWith(Parameterized.class)
 public class IngredientTypeTest {
 
+    private final IngredientType ingredientType;
+    private final IngredientType expected;
+
+    public IngredientTypeTest(IngredientType ingredientType, IngredientType expected) {
+        this.ingredientType = ingredientType;
+        this.expected = expected;
+    }
+
+    @Parameterized.Parameters
+    public static Object[][] ingredientTypeParam() {
+        return new Object[][] {
+                {SAUCE, SAUCE},
+                {FILLING, FILLING}
+        };
+    }
+
     @Test
-    public void shouldIngredientTypes(){
-        assertThat(IngredientType.valueOf("SAUCE"), is(notNullValue()));
-        assertThat(IngredientType.valueOf("FILLING"), is(notNullValue()));
+    public void getIngredientType() {
+        Ingredient ingredient = new Ingredient(ingredientType, "говяжья котлета", 0.5f);
+        IngredientType actual = ingredient.getType();
+        assertEquals("Данные не совпадают", expected, actual);
     }
 }
